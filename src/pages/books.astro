@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import StarRating from '../components/StarRating.astro';
+
+const books = await getCollection('books');
+books.sort((a, b) => new Date(b.data.dateRead).getTime() - new Date(a.data.dateRead).getTime());
+---
+
+<Layout>
+	<section class="books-page animate-fade-in-up">
+		<div class="mb-10">
+			<h1 class="text-4xl font-extrabold text-slate-900 mb-2">📚 Books I've Read</h1>
+			<p class="text-slate-600">With reviews and star ratings</p>
+		</div>
+
+		<div class="grid md:grid-cols-3 gap-6">
+			{books.map((book) => {
+				const { data } = book;
+				return (
+					<article class="book-card bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden">
+						{data.cover ? (
+							<img src={data.cover} alt={data.title} class="w-full h-48 object-cover" />
+						) : (
+							<div class="w-full h-48 bg-slate-100 flex items-center justify-center">
+								<span class="text-4xl">📖</span>
+							</div>
+						)}
+						<div class="p-6">
+							<div class="flex justify-between items-start mb-2">
+								<h3 class="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+									{data.title}
+								</h3>
+								<StarRating rating={data.rating} />
+							</div>
+							<p class="text-sm text-slate-500 font-medium mb-4">by {data.author}</p>
+							<p class="text-slate-600 text-sm leading-relaxed mb-4">{data.review}</p>
+							<div class="flex flex-wrap gap-2 text-xs text-slate-400">
+								<span>{data.genre}</span>
+								<span>{new Date(data.dateRead).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })}</span>
+							</div>
+						</div>
+					</article>
+				);
+			})}
+		</div>
+
+		{books.length === 0 && (
+			<div class="text-center py-20">
+				<p class="text-slate-500">No books added yet. Add markdown files to <code>src/content/books/</code> to get started.</p>
+			</div>
+		)}
+	</section>
+</Layout>
+
+<style>
+	.book-card {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
+</style>

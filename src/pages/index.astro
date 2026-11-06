@@ -1,11 +1,57 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import "../styles/global.css";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const aboutContent = {
+  name: 'Tea Shah',
+  tagline: 'Designer · Developer · Music Lover · Reader · Traveler',
+  bio: `I'm a product designer and developer passionate about building meaningful digital experiences. 
+  When I'm not designing or coding, you can find me listening to music, reading books, 
+  capturing moments through photography, or exploring new places around the world.`,
+  funFact: 'I believe every day should have at least one good song, one good book, and one new photo.',
+};
 ---
 
 <Layout>
-	<h1>hello world</h1>
+	<section class="about-page animate-fade-in-up">
+		<div class="flex flex-col lg:flex-row gap-12 items-center">
+			<div class="lg:w-1/3">
+				<div class="relative">
+					<img
+						src="/images/profile.jpg"
+						alt="Tea Shah"
+						class="w-full rounded-3xl shadow-2xl ring-8 ring-white object-cover h-80"
+						loading="eager"
+					/>
+					<div class="absolute -bottom-4 -right-4 w-24 h-24 bg-slate-900 rounded-full blur-3xl opacity-20" />
+				</div>
+			</div>
+			<div class="lg:w-2/3 space-y-8">
+				<div>
+					<h1 class="text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+						Hi, I'm <span class="text-indigo-600">{aboutContent.name}</span>
+					</h1>
+					<p class="text-xl text-indigo-600 font-semibold mb-6">{aboutContent.tagline}</p>
+					<p class="text-lg text-slate-600 leading-relaxed">{aboutContent.bio}</p>
+				</div>
+				<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm animate-pulse-slow">
+					<h2 class="text-xl font-bold text-slate-900 mb-3">✨ Fun Fact</h2>
+					<p class="text-slate-600 italic">{aboutContent.funFact}</p>
+				</div>
+				<div class="flex flex-wrap gap-4">
+					<a
+						href="/music"
+						class="px-8 py-4 bg-slate-900 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+					>
+						🎵 Explore My Music
+					</a>
+					<a
+						href="/books"
+						class="px-8 py-4 border border-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-100 transition-all"
+					>
+						📚 See My Books
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
 </Layout>
