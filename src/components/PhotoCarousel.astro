@@ -1,0 +1,81 @@
+---
+interface Photo {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
+const photos: Photo[] = [
+  { src: '/images/photos/photo1.jpg', alt: 'Life moment 1', caption: 'A memory worth keeping' },
+  { src: '/images/photos/photo2.jpg', alt: 'Life moment 2', caption: 'Another beautiful day' },
+  { src: '/images/photos/photo3.jpg', alt: 'Life moment 3', caption: 'Captured in time' },
+];
+---
+
+<div class="photo-carousel relative group">
+	<div class="carousel-wrapper overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-lg aspect-video">
+		<div class="carousel-track flex transition-transform duration-700 ease-in-out" id="carouselTrack">
+			{photos.map((photo) => (
+				<div class="flex-shrink-0 w-full aspect-video">
+					<img
+						src={photo.src}
+						alt={photo.alt}
+						class="w-full h-full object-cover"
+						loading="lazy"
+					/>
+				</div>
+			))}
+		</div>
+		{photos.length > 1 && (
+			<>
+				<button
+					onclick="document.getElementById('carouselTrack').scrollLeft -= 300"
+					class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg hover:shadow-xl transition-all border border-slate-200"
+					aria-label="Previous photo"
+				>
+					<svg class="w-6 h-6 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+					</svg>
+				</button>
+				<button
+					onclick="document.getElementById('carouselTrack').scrollLeft += 300"
+					class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg hover:shadow-xl transition-all border border-slate-200"
+					aria-label="Next photo"
+				>
+					<svg class="w-6 h-6 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+					</svg>
+				</button>
+			</>
+		)}
+	</div>
+	{photos.length > 0 && (
+		<div class="mt-4 flex justify-center gap-2">
+			{photos.map((_, i) => (
+				<button
+					onclick={`document.getElementById('carouselTrack').scrollLeft = ${i * 100}vw`}
+					class={`w-2 h-2 rounded-full transition-all ${i === 0 ? 'bg-indigo-600' : 'bg-slate-300 hover:bg-slate-400'}`}
+					aria-label={`Go to photo ${i + 1}`}
+				></button>
+			))}
+		</div>
+	)}
+	{photos.length > 0 && (
+		<div class="mt-2 text-center text-slate-500 text-sm italic">
+			{photos[0]?.caption || 'Photo carousel'}
+		</div>
+	)}
+</div>
+
+<style>
+	.carousel-track {
+		scroll-behavior: smooth;
+		display: flex;
+	}
+	.carousel-track img {
+		transition: transform 0.3s ease;
+	}
+	.group:hover .carousel-track img:not(:hover) {
+		opacity: 0.95;
+	}
+</style>

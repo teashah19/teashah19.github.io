@@ -1,0 +1,66 @@
+---
+interface Props {
+  clientId?: string;
+}
+
+const { clientId } = Astro.props as Props;
+---
+
+<div class="spotify-placeholder bg-slate-900 rounded-2xl p-8 text-white relative overflow-hidden">
+	<div class="absolute top-0 left-0 w-full h-full opacity-10">
+		<svg class="w-full h-full" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+			<circle cx="50" cy="50" r="40" fill="currentColor" />
+		</svg>
+	</div>
+	<div class="relative z-10">
+		{clientId ? (
+			<>
+				<h2 class="text-2xl font-bold mb-4">🎵 Your Spotify Library</h2>
+				<div class="grid md:grid-cols-3 gap-4">
+					{[
+						{ title: 'Discover Weekly', artist: 'Spotify' },
+						{ title: 'Release Radar', artist: 'Spotify' },
+						{ title: 'Daily Mix 1', artist: 'Various' },
+					].map((track) => (
+						<div class="bg-white/10 p-4 rounded-xl hover:bg-white/20 transition-colors cursor-pointer">
+							<div class="w-12 h-12 bg-indigo-500 rounded-lg mb-3 flex items-center justify-center">
+								<span class="text-white font-bold">♫</span>
+							</div>
+							<h4 class="font-semibold text-sm">{track.title}</h4>
+							<p class="text-xs text-slate-400">{track.artist}</p>
+						</div>
+					))}
+				</div>
+				<p class="mt-6 text-slate-400 text-sm">
+					Connected to your Spotify account
+				</p>
+			</>
+		) : (
+			<>
+				<h2 class="text-2xl font-bold mb-4">🎵 Spotify Integration</h2>
+				<div class="flex flex-col items-center justify-center text-center space-y-6 py-12">
+					<div class="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mb-4">
+						<span class="text-4xl">🎵</span>
+					</div>
+					<p class="text-slate-400 max-w-xs">
+						Set up your Spotify Developer app to see your real library here. Add your
+						<code class="bg-white/20 px-2 py-0.5 rounded text-indigo-300">SPOTIFY_CLIENT_ID</code> environment variable to connect.
+					</p>
+					<a
+						href="https://developer.spotify.com/dashboard"
+						class="bg-white text-slate-900 px-8 py-3 rounded-xl font-semibold hover:bg-indigo-50 hover:text-indigo-900 transition-colors"
+						target="_blank"
+					>
+						Create Spotify App
+					</a>
+				</div>
+			</>
+		)}
+	</div>
+</div>
+
+<style>
+	.spotify-placeholder {
+		background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+	}
+</style>

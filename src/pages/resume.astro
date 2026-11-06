@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+	<section class="resume-page animate-fade-in-up">
+		<div class="max-w-2xl mx-auto text-center py-20">
+			<div class="bg-white p-12 rounded-3xl border border-slate-200 shadow-lg inline-block">
+				<h1 class="text-4xl font-extrabold text-slate-900 mb-4">📄 My Resume</h1>
+				<p class="text-slate-600 text-lg mb-8">
+					Download my full resume and work experience
+				</p>
+				<a
+					href="/resume.pdf"
+					class="px-10 py-5 bg-slate-900 text-white rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1 flex items-center justify-center gap-2"
+				>
+					📥 Download PDF
+				</a>
+				<p class="mt-6 text-slate-400 text-sm">
+					Add your resume as <code class="bg-slate-100 px-2 py-0.5 rounded">/public/resume.pdf</code>
+				</p>
+			</div>
+		</div>
+	</section>
+</Layout>

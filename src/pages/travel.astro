@@ -1,0 +1,58 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const travel = await getCollection('travel');
+travel.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+---
+
+<Layout>
+	<section class="travel-page animate-fade-in-up">
+		<div class="mb-10">
+			<h1 class="text-4xl font-extrabold text-slate-900 mb-2">🌍 Travel Diary</h1>
+			<p class="text-slate-600">Places I've been, with pictures</p>
+		</div>
+
+		<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+			{travel.map((entry) => {
+				const { data } = entry;
+				return (
+					<article class="travel-card bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-xl transition-all duration-300 group">
+						<div class="relative h-48 overflow-hidden">
+							<img
+								src={data.image}
+								alt={data.title}
+								class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+								loading="lazy"
+							/>
+							<div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+								<h3 class="text-white font-bold text-xl">{data.title}</h3>
+							</div>
+						</div>
+						<div class="p-6">
+							<h3 class="text-lg font-bold text-slate-900 mb-1">{data.title}</h3>
+							<p class="text-sm text-indigo-600 font-medium mb-2">{data.location}</p>
+							<p class="text-sm text-slate-500 mb-4">{data.date}</p>
+							<p class="text-slate-600 text-sm leading-relaxed mb-4">{data.description}</p>
+							{data.highlights && data.highlights.length > 0 && (
+								<div class="flex flex-wrap gap-2">
+									{data.highlights.map((highlight) => (
+										<span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs font-medium rounded-md border border-indigo-100">
+											{highlight}
+										</span>
+									))}
+								</div>
+							)}
+						</div>
+					</article>
+				);
+			})}
+		</div>
+
+		{travel.length === 0 && (
+			<div class="text-center py-20">
+				<p class="text-slate-500">No travel entries yet. Add markdown files to <code class="bg-slate-100 px-2 py-0.5 rounded">src/content/travel/</code> to get started.</p>
+			</div>
+		)}
+	</section>
+</Layout>

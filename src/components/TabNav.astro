@@ -1,0 +1,82 @@
+---
+interface Tab {
+  href: string;
+  label: string;
+  icon: string;
+}
+
+const tabs: Tab[] = [
+  { href: '/', label: 'About Me', icon: '📁' },
+  { href: '/music', label: 'Music', icon: '🎵' },
+  { href: '/books', label: 'Books', icon: '📚' },
+  { href: '/photos', label: 'Photos', icon: '📸' },
+  { href: '/resume', label: 'Resume', icon: '📄' },
+  { href: '/travel', label: 'Travel', icon: '🌍' },
+];
+
+const currentUrl = Astro.url.pathname;
+
+const isActive = (href: string) => currentUrl === href || (href !== '/' && currentUrl.startsWith(href));
+---
+
+<nav class="tab-folder w-full max-w-6xl mx-auto">
+  <ul class="flex gap-1 px-4 pb-1">
+    {tabs.map((tab) => {
+      const active = isActive(tab.href);
+      return (
+        <li>
+          <a
+            href={tab.href}
+            class={[
+              'tab px-6 py-3 text-sm font-medium rounded-t-xl transition-all duration-300',
+              active
+                ? 'bg-slate-900 text-white shadow-[0_4px_0_rgba(0,0,0,0.1)] border-slate-900'
+                : 'bg-slate-100 text-slate-600 border-transparent hover:bg-slate-200 hover:text-slate-900',
+            ].join(' ')}
+          >
+            <span class="mr-2">{tab.icon}</span>
+            {tab.label}
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</nav>
+
+<style>
+  .tab-folder {
+    position: relative;
+    margin-bottom: -1px;
+  }
+
+  .tab {
+    position: relative;
+    border: 2px solid transparent;
+    border-bottom: none;
+    z-index: 1;
+  }
+
+  .tab::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 12px 12px 0 0;
+    border: 2px solid currentColor;
+    border-bottom: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+
+  .tab:hover::before {
+    opacity: 0.3;
+  }
+
+  .tab.bg-slate-900::before {
+    opacity: 1;
+    border-color: #111827;
+  }
+</style>

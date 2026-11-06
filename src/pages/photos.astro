@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PhotoCarousel from '../components/PhotoCarousel.astro';
+---
+
+<Layout>
+	<section class="photos-page animate-fade-in-up">
+		<div class="mb-10">
+			<h1 class="text-4xl font-extrabold text-slate-900 mb-2">📸 Photos</h1>
+			<p class="text-slate-600">A carousel of moments from my life</p>
+		</div>
+
+		<PhotoCarousel />
+
+		<div class="mt-12 text-center text-slate-500 text-sm">
+			Add your photos to <code class="bg-slate-100 px-2 py-0.5 rounded">/public/images/photos/</code> and update <code>PhotoCarousel.astro</code> to display them.
+		</div>
+	</section>
+</Layout>
