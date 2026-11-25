@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Archive of Tejal Shah</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --desk: rgb(184, 175, 155);
+        --ink: rgb(37, 36, 30);
+        --ink-soft: rgb(95, 91, 80);
+        --line: rgba(60, 55, 40, 0.18);
+        --red: rgb(207, 92, 72);
+
+        --about: rgb(242, 237, 223);
+        --listening: rgb(216, 184, 95);
+        --library: rgb(166, 177, 151);
+        --photos: rgb(174, 126, 126);
+        --resume: rgb(119, 157, 178);
+        --travel: rgb(207, 119, 87);
+
+        --panel: var(--about);
+
+        --sans: "DM Sans", Arial, sans-serif;
+        --display: "Instrument Serif", "Times New Roman", serif;
+        --text: "Newsreader", Georgia, serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        background: var(--desk);
+        color: var(--ink);
+        font-family: var(--sans);
+        min-height: 100vh;
+        padding: 0 32px 48px;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap { max-width: 1200px; margin: 0 auto; }
+
+    /* ---------- Header ---------- */
+    .header {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: start;
+        padding: 30px 4px 0;
+        height: 108px;
+    }
+    .logo {
+        font-family: var(--display);
+        font-size: 44px;
+        line-height: 1;
+        letter-spacing: -2px;
+        position: relative;
+        width: max-content;
+    }
+    .logo::after {
+        content: "";
+        position: absolute;
+        left: 50%; top: 2px;
+        width: 1.5px; height: 44px;
+        background: var(--red);
+        transform: translateX(-50%) rotate(20deg);
+    }
+    .heading {
+        text-align: center;
+        font-size: 10px;
+        letter-spacing: 2px;
+        font-weight: 400;
+        line-height: 1.6;
+        margin-top: 4px;
+    }
+    .name {
+        display: block;
+        font-weight: 600;
+        letter-spacing: 2.5px;
+        font-size: 12px;
+    }
+    .date {
+        justify-self: end;
+        font-size: 11px;
+        letter-spacing: 2px;
+        margin-top: 12px;
+        word-spacing: 14px;
+    }
+
+    /* ---------- Tabs ---------- */
+    .tabs {
+        display: flex;
+        align-items: flex-end;
+        height: 58px;
+        padding: 0 30px;
+        position: relative;
+        z-index: 2;
+    }
+    .tab {
+        flex: 1;
+        height: 48px;
+        border: none;
+        border-radius: 14px 14px 0 0;
+        text-align: left;
+        padding: 10px 16px 0;
+        color: var(--ink);
+        font-family: var(--sans);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 6px;
+        transition: height .25s ease, filter .2s ease;
+    }
+    .tab .num {
+        font-size: 9px;
+        letter-spacing: 1.5px;
+        opacity: .55;
+    }
+    .tab .label {
+        font-size: 11px;
+        letter-spacing: 1.6px;
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+    .tab:hover { filter: brightness(1.05); }
+    .tab:focus-visible { outline: 2px solid var(--ink); outline-offset: -3px; }
+    .tab.active { height: 58px; }
+    .tab.active .label { font-weight: 600; }
+
+    .tab[data-tab="about"]     { background: var(--about); }
+    .tab[data-tab="listening"] { background: var(--listening); }
+    .tab[data-tab="library"]   { background: var(--library); }
+    .tab[data-tab="photos"]    { background: var(--photos); }
+    .tab[data-tab="resume"]    { background: var(--resume); }
+    .tab[data-tab="travel"]    { background: var(--travel); }
+
+    /* ---------- Panel ---------- */
+    .panel {
+        position: relative;
+        z-index: 1;
+        background: var(--panel);
+        border-radius: 6px;
+        min-height: 640px;
+        padding: 20px;
+        box-shadow: 0 24px 50px rgba(60, 50, 30, .28), 0 2px 6px rgba(60, 50, 30, .15);
+        transition: background-color .4s ease;
+        background-image: radial-gradient(rgba(0,0,0,.025) 1px, transparent 1px);
+        background-size: 4px 4px;
+    }
+    .panel-inner {
+        border: 1px solid var(--line);
+        min-height: 600px;
+        padding: 64px 64px 0;
+        display: flex;
+        flex-direction: column;
+    }
+    .page { display: none; flex: 1; flex-direction: column; animation: fade .45s ease; }
+    .page.show { display: flex; }
+    @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    .page-body { flex: 1; }
+
+    .eyebrow {
+        font-size: 10px;
+        letter-spacing: 2.2px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    h1, h2 {
+        font-family: var(--display);
+        font-weight: 400;
+        letter-spacing: -0.03em;
+        line-height: .95;
+    }
+    .big { font-size: 92px; margin-top: 18px; }
+    .lead {
+        font-family: var(--display);
+        font-size: 36px;
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+        margin-top: 28px;
+        max-width: 640px;
+    }
+    .italic { font-family: var(--text); font-style: italic; }
+
+    .footer {
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid var(--line);
+        padding: 20px 0 22px;
+        font-size: 9.5px;
+        letter-spacing: 1.4px;
+        color: var(--ink-soft);
+        text-transform: uppercase;
+        margin-top: 40px;
+    }
+
+    /* ---------- About ---------- */
+    .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 300px 190px;
+        gap: 44px;
+        align-items: start;
+    }
+    .status {
+        display: flex; align-items: center; gap: 12px;
+        font-size: 13px; margin-top: 44px;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: rgb(224, 128, 112); }
+
+    .polaroid {
+        position: relative;
+        background: rgb(247, 243, 232);
+        padding: 14px 14px 52px;
+        transform: rotate(2.2deg);
+        box-shadow: 0 10px 22px rgba(60, 50, 30, .25);
+        margin-top: 14px;
+    }
+    .polaroid .photo {
+        aspect-ratio: 1 / 1;
+        background: rgb(201, 192, 171);
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 22px;
+        overflow: hidden;
+    }
+    .polaroid .photo img { width: 100%; height: 100%; object-fit: cover; }
+    .polaroid .initial {
+        font-family: var(--display); font-style: italic;
+        font-size: 120px; line-height: 1; color: rgb(150, 140, 120);
+    }
+    .polaroid .photo small { font-size: 8.5px; letter-spacing: 1.6px; font-weight: 500; }
+    .polaroid .caption {
+        position: absolute; right: 22px; bottom: 14px;
+        font-family: var(--text); font-style: italic; font-size: 20px;
+    }
+    .tape {
+        position: absolute; top: -12px; left: 50%;
+        width: 88px; height: 30px;
+        transform: translateX(-70%) rotate(-2deg);
+        background: rgba(228, 205, 140, .65);
+    }
+    .clip { position: absolute; top: -34px; right: 10px; width: 28px; height: 80px; transform: rotate(4deg); }
+
+    .notes { border-left: 1px solid var(--ink-soft); padding-left: 26px; margin-top: 0; height: 100%; min-height: 420px; }
+    .notes h3 {
+        font-size: 9.5px; letter-spacing: 2px; font-weight: 600;
+        padding-bottom: 8px; border-bottom: 1px solid var(--line);
+        margin-top: 78px;
+    }
+    .note { padding: 18px 0 16px; border-bottom: 1px solid var(--line); }
+    .note small { display: block; font-size: 9px; letter-spacing: 1.6px; color: var(--ink-soft); margin-bottom: 8px; }
+    .note span { font-family: var(--text); font-style: italic; font-size: 19px; }
+
+    /* ---------- Listening ---------- */
+    .head-row { display: flex; justify-content: space-between; align-items: flex-end; }
+    .pill {
+        display: inline-flex; align-items: center; gap: 10px;
+        border: 1px solid var(--ink-soft); border-radius: 999px;
+        padding: 12px 20px; font-size: 10px; letter-spacing: 1.6px; font-weight: 500;
+        margin-bottom: 18px;
+    }
+    .bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 11px; }
+    .bars i { width: 2.5px; background: var(--ink); display: block; }
+    .bars i:nth-child(1) { height: 6px; } .bars i:nth-child(2) { height: 11px; } .bars i:nth-child(3) { height: 8px; }
+
+    .listen-grid { display: grid; grid-template-columns: 1fr 1.25fr; gap: 56px; margin-top: 70px; align-items: start; }
+    .now { display: flex; gap: 32px; align-items: center; margin-top: 36px; }
+    .album {
+        width: 232px; height: 232px; flex: none; position: relative;
+        background: rgb(200, 85, 62);
+        box-shadow: 10px 10px 0 rgba(60, 50, 30, .14);
+        display: grid; place-items: center;
+    }
+    .album .r1 { width: 180px; height: 180px; border-radius: 50%; background: rgb(168, 74, 60); display: grid; place-items: center; }
+    .album .r2 { width: 128px; height: 128px; border-radius: 50%; background: rgb(232, 196, 106); }
+    .album small { position: absolute; left: 16px; bottom: 16px; font-size: 8.5px; letter-spacing: 1.6px; font-weight: 500; }
+    .now-info small { font-size: 9px; letter-spacing: 2px; font-weight: 500; }
+    .now-info h2 { font-size: 40px; margin: 6px 0 8px; }
+    .now-info p { font-size: 13px; color: var(--ink-soft); }
+    .progress { height: 2px; background: var(--line); margin-top: 28px; width: 290px; }
+    .progress i { display: block; height: 100%; width: 55%; background: var(--red); }
+
+    .tracks { border-top: 1px solid var(--ink-soft); }
+    .track {
+        display: grid; grid-template-columns: 52px 1fr auto; gap: 20px; align-items: center;
+        padding: 16px 0; border-bottom: 1px solid var(--line);
+    }
+    .track .n { width: 52px; height: 52px; display: grid; place-items: center; color: #fff; font-family: var(--display); font-size: 22px; }
+    .track b { font-weight: 500; font-size: 16px; display: block; }
+    .track span { font-size: 11px; color: var(--ink-soft); }
+    .track time { font-size: 12px; color: var(--ink-soft); }
+    .tracks-note { margin-top: 22px; font-family: var(--text); font-style: italic; font-size: 14px; color: var(--ink-soft); }
+
+    /* ---------- Library ---------- */
+    .shelf { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; margin-top: 64px; }
+    .book { display: flex; gap: 24px; align-items: flex-start; }
+    .cover {
+        width: 144px; height: 214px; flex: none; position: relative;
+        padding: 16px; color: #f7f1e3;
+        box-shadow: 6px 6px 0 rgba(60, 50, 30, .15);
+        display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .cover small { font-size: 7.5px; letter-spacing: 1.4px; font-weight: 500; }
+    .cover b { font-family: var(--display); font-weight: 400; font-size: 25px; line-height: 1.02; letter-spacing: -0.02em; }
+    .cover em { font-style: normal; font-size: 9px; letter-spacing: 1px; }
+    .book-info .stars { color: var(--red); font-size: 13px; letter-spacing: 2px; }
+    .book-info h3 { font-family: var(--display); font-weight: 400; font-size: 27px; line-height: 1.05; letter-spacing: -0.02em; margin: 12px 0 6px; }
+    .book-info .by { font-size: 9.5px; letter-spacing: 1.2px; color: var(--ink-soft); text-transform: uppercase; }
+    .book-info p { font-family: var(--text); font-style: italic; font-size: 16px; line-height: 1.35; margin: 8px 0 12px; }
+    .stamp {
+        display: inline-block; border: 1px solid var(--red); color: var(--red);
+        font-size: 8px; letter-spacing: 1.4px; padding: 5px 8px; transform: rotate(-2.5deg);
+    }
+
+    /* ---------- Photos ---------- */
+    .gallery { position: relative; display: flex; justify-content: center; margin-top: 24px; }
+    .gallery .frame {
+        width: min(760px, 100%); background: rgb(247, 243, 232);
+        padding: 14px 14px 64px; position: relative;
+        transform: rotate(-.7deg);
+        box-shadow: 0 14px 30px rgba(60, 50, 30, .25);
+    }
+    .gallery .shot { aspect-ratio: 1.45 / 1; background-size: cover; background-position: center; transition: opacity .3s; }
+    .frame .cap { position: absolute; left: 22px; bottom: 16px; font-family: var(--text); font-style: italic; font-size: 22px; }
+    .frame .loc { position: absolute; right: 22px; bottom: 22px; font-size: 9px; letter-spacing: 1.6px; font-weight: 500; }
+    .arrow {
+        position: absolute; top: 50%; width: 46px; height: 46px; margin-top: -23px;
+        border: 1px solid var(--ink); border-radius: 50%; background: transparent;
+        font-size: 18px; cursor: pointer; color: var(--ink); transition: background .2s;
+    }
+    .arrow:hover { background: rgba(0,0,0,.06); }
+    .arrow.prev { left: 4%; } .arrow.next { right: 4%; }
+    .dots { display: flex; gap: 8px; justify-content: center; margin-top: 26px; }
+    .dots i { width: 22px; height: 3px; background: rgba(0,0,0,.18); cursor: pointer; }
+    .dots i.on { background: var(--red); }
+    .gallery-note { text-align: center; margin-top: 18px; font-family: var(--text); font-style: italic; font-size: 14px; color: var(--ink-soft); }
+    .counter { font-family: var(--text); font-style: italic; font-size: 20px; }
+
+    /* ---------- Resume ---------- */
+    .resume-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; margin-top: 10px; }
+    .resume-grid .big { font-size: 78px; line-height: .92; }
+    .resume-grid .lead { font-size: 28px; line-height: 1.12; max-width: 440px; }
+    .open-link {
+        display: inline-flex; align-items: center; gap: 70px;
+        font-size: 11px; letter-spacing: 1.6px; font-weight: 500; color: var(--ink);
+        text-decoration: none; border-bottom: 1.5px solid var(--ink); padding-bottom: 10px; margin-top: 36px;
+    }
+    .resume-note { font-size: 10px; color: var(--ink-soft); margin-top: 14px; }
+    .resume-note code { font-family: ui-monospace, Menlo, monospace; }
+    .jobs { border-top: 2px solid var(--ink-soft); margin-top: 24px; }
+    .job { display: grid; grid-template-columns: 100px 1fr; padding: 22px 0; border-bottom: 1px solid var(--line); }
+    .job time { font-size: 10px; letter-spacing: 1.2px; color: var(--ink-soft); padding-top: 6px; }
+    .job h3 { font-family: var(--display); font-weight: 400; font-size: 29px; letter-spacing: -0.02em; line-height: 1; }
+    .job p { font-size: 11.5px; color: var(--ink-soft); margin-top: 8px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+    .chips span { border: 1px solid var(--ink-soft); border-radius: 999px; padding: 9px 14px; font-size: 9px; letter-spacing: 1.4px; font-weight: 500; }
+
+    /* ---------- Travel ---------- */
+    .travel-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 70px; margin-top: 56px; align-items: start; }
+    .feature {
+        display: grid; grid-template-columns: 1.05fr 1fr;
+        background: rgb(247, 243, 232); box-shadow: 8px 8px 0 rgba(60, 50, 30, .13);
+    }
+    .feature .img { min-height: 330px; background-size: cover; background-position: center; }
+    .feature .body { padding: 44px 30px 30px; position: relative; }
+    .feature .where { font-size: 9.5px; letter-spacing: 2px; font-weight: 600; }
+    .feature h2 { font-size: 38px; margin: 14px 0 18px; line-height: .98; }
+    .feature p { font-family: var(--text); font-size: 15px; line-height: 1.5; }
+    .seal {
+        position: absolute; top: 18px; right: 18px; width: 56px; height: 56px; border-radius: 50%;
+        border: 1.5px solid var(--red); color: var(--red);
+        display: grid; place-items: center; font-size: 7.5px; letter-spacing: 1.2px; transform: rotate(-8deg);
+    }
+    .places { border-top: 1.5px solid var(--ink-soft); }
+    .place { padding: 22px 0 20px; border-bottom: 1px solid var(--line); cursor: pointer; transition: padding-left .2s; }
+    .place:hover { padding-left: 8px; }
+    .place .top { display: flex; justify-content: space-between; align-items: baseline; }
+    .place h3 { font-family: var(--display); font-weight: 400; font-size: 27px; letter-spacing: -0.02em; }
+    .place time { font-size: 9px; letter-spacing: 1.2px; color: var(--ink-soft); }
+    .place p { font-family: var(--text); font-style: italic; font-size: 14px; color: var(--ink-soft); margin-top: 6px; }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 1000px) {
+        body { padding: 0 14px 30px; }
+        .panel-inner { padding: 36px 28px 0; }
+        .about-grid, .listen-grid, .resume-grid, .travel-grid, .shelf { grid-template-columns: 1fr; gap: 36px; }
+        .notes { min-height: 0; border-left: none; padding-left: 0; }
+        .notes h3 { margin-top: 0; }
+        .big { font-size: 56px; }
+        .lead { font-size: 26px; }
+        .feature { grid-template-columns: 1fr; }
+        .now { flex-direction: column; align-items: flex-start; }
+        .tabs { padding: 0; }
+        .tab { padding: 8px 8px 0; }
+        .tab .label { font-size: 8px; letter-spacing: .8px; }
+        .header { height: 90px; }
+    }
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">A<span style="margin-left:2px">M</span></div>
+        <div>
+            <p class="heading">THE PERSONAL FILES OF <span class="name">Tejal Shah</span></p>
+        </div>
+        <div class="date" id="date">Oct 2026</div>
+    </header>
+
+    <!-- Tabs -->
+    <nav class="tabs" role="tablist">
+        <button class="tab active" data-tab="about" role="tab"><span class="num">01</span><span class="label">About</span></button>
+        <button class="tab" data-tab="listening" role="tab"><span class="num">02</span><span class="label">Listening</span></button>
+        <button class="tab" data-tab="library" role="tab"><span class="num">03</span><span class="label">Library</span></button>
+        <button class="tab" data-tab="photos" role="tab"><span class="num">04</span><span class="label">Photos</span></button>
+        <button class="tab" data-tab="resume" role="tab"><span class="num">05</span><span class="label">Résumé</span></button>
+        <button class="tab" data-tab="travel" role="tab"><span class="num">06</span><span class="label">Travel Diary</span></button>
+    </nav>
+
+    <!-- Panel -->
+    <main class="panel" id="panel">
+        <div class="panel-inner">
+
+            <!-- 01 ABOUT -->
+            <section class="page show" id="about">
+                <div class="page-body about-grid">
+                    <div>
+                        <div class="eyebrow">A small archive of a life in progress</div>
+                        <h1 class="big">Hello, I’m Tejal.</h1>
+                        <p class="lead">Designer, curious generalist, and collector of good stories. I make thoughtful digital things and spend the rest of my time looking for new records, old books, and the best table by the window.</p>
+                        <div class="status"><span class="dot"></span>Currently based in Berkeley, open to good conversations.</div>
+                    </div>
+
+                    <div class="polaroid">
+                        <div class="tape"></div>
+                        <svg class="clip" viewBox="0 0 26 80" fill="none" stroke="#6f6c66" stroke-width="2.6" stroke-linecap="round">
+                            <path d="M9 72V20a7 7 0 0 1 14 0V58a11 11 0 0 1-22 0V26"/>
+                        </svg>
+                        <div class="photo">
+                            <!-- To use a real photo: replace this block with <img src="portrait.jpg" alt="Tejal"> -->
+                            <span class="initial">A</span>
+                            <small>YOUR PORTRAIT HERE</small>
+                        </div>
+                        <div class="caption">me, lately</div>
+                    </div>
+
+                    <aside class="notes">
+                        <h3>FIELD NOTES</h3>
+                        <div class="note"><small>MAKING</small><span>Digital experiences</span></div>
+                        <div class="note"><small>READING</small><span>The Overstory</span></div>
+                        <div class="note"><small>LEARNING</small><span>Italian, slowly</span></div>
+                    </aside>
+                </div>
+                <div class="footer"><span>Archive / 01</span><span>Made with care, updated often.</span></div>
+            </section>
+
+            <!-- 02 LISTENING -->
+            <section class="page" id="listening">
+                <div class="page-body">
+                    <div class="head-row">
+                        <div>
+                            <div class="eyebrow">On repeat</div>
+                            <h1 class="big" style="font-size:72px">What I’m listening to</h1>
+                        </div>
+                        <div class="pill"><span class="bars"><i></i><i></i><i></i></span>PULLED FROM SPOTIFY</div>
+                    </div>
+
+                    <div class="listen-grid">
+                        <div class="now">
+                            <div class="album"><div class="r1"><div class="r2"></div></div><small>NOW PLAYING</small></div>
+                            <div class="now-info">
+                                <small>LAST PLAYED</small>
+                                <h2>Texas Sun</h2>
+                                <p>Khruangbin, Leon Bridges</p>
+                                <div class="progress"><i id="progressFill"></i></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="tracks">
+                                <div class="track"><div class="n" style="background:rgb(110,58,52)">01</div><div><b>All I Need</b><span>Radiohead · In Rainbows</span></div><time>3:48</time></div>
+                                <div class="track"><div class="n" style="background:rgb(122,140,112)">02</div><div><b>Anything</b><span>Adrianne Lenker · songs</span></div><time>3:22</time></div>
+                                <div class="track"><div class="n" style="background:rgb(212,163,74)">03</div><div><b>Texas Sun</b><span>Khruangbin, Leon Bridges · Texas Sun</span></div><time>4:12</time></div>
+                            </div>
+                            <p class="tracks-note">Connect your Spotify account to make this list update automatically.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer"><span>Archive / 02</span><span>Made with care, updated often.</span></div>
+            </section>
+
+            <!-- 03 LIBRARY -->
+            <section class="page" id="library">
+                <div class="page-body">
+                    <div class="eyebrow">Shelf No. 3</div>
+                    <div class="head-row">
+                        <h1 class="big" style="font-size:80px">Books that stayed with me</h1>
+                        <span class="counter">32 read this year</span>
+                    </div>
+
+                    <div class="shelf">
+                        <article class="book">
+                            <div class="cover" style="background:rgb(170,116,52)">
+                                <small>RICK RUBIN</small><b>The Creative Act</b><em>01</em>
+                            </div>
+                            <div class="book-info">
+                                <div class="stars">★★★★★</div>
+                                <h3>The Creative Act</h3>
+                                <div class="by">By Rick Rubin</div>
+                                <p>A book to return to whenever the signal gets lost in the noise.</p>
+                                <span class="stamp">READ 2025</span>
+                            </div>
+                        </article>
+
+                        <article class="book">
+                            <div class="cover" style="background:rgb(84,106,122)">
+                                <small>GABRIELLE ZEVIN</small><b>Tomorrow, and Tomorrow, and Tomorrow</b><em>02</em>
+                            </div>
+                            <div class="book-info">
+                                <div class="stars">★★★★☆</div>
+                                <h3>Tomorrow, and Tomorrow, and Tomorrow</h3>
+                                <div class="by">By Gabrielle Zevin</div>
+                                <p>Tender, ambitious, and wonderfully interested in how we make things together.</p>
+                                <span class="stamp">READ 2025</span>
+                            </div>
+                        </article>
+
+                        <article class="book">
+                            <div class="cover" style="background:rgb(150,70,60)">
+                                <small>OCEAN VUONG</small><b>On Earth We’re Briefly Gorgeous</b><em>03</em>
+                            </div>
+                            <div class="book-info">
+                                <div class="stars">★★★★★</div>
+                                <h3>On Earth We’re Briefly Gorgeous</h3>
+                                <div class="by">By Ocean Vuong</div>
+                                <p>Language so precise it makes the familiar feel newly discovered.</p>
+                                <span class="stamp">READ 2025</span>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <div class="footer"><span>Archive / 03</span><span>Made with care, updated often.</span></div>
+            </section>
+
+            <!-- 04 PHOTOS -->
+            <section class="page" id="photos">
+                <div class="page-body">
+                    <div class="eyebrow">Camera Roll</div>
+                    <div class="head-row">
+                        <h1 class="big" style="font-size:72px">Proof I was there</h1>
+                        <span class="counter" id="photoCounter">01 / 04</span>
+                    </div>
+
+                    <div class="gallery">
+                        <button class="arrow prev" id="prev" aria-label="Previous photo">←</button>
+                        <div class="frame">
+                            <div class="shot" id="shot"></div>
+                            <div class="cap" id="photoCap"></div>
+                            <div class="loc" id="photoLoc"></div>
+                        </div>
+                        <button class="arrow next" id="next" aria-label="Next photo">→</button>
+                    </div>
+                    <div class="dots" id="dots"></div>
+                    <p class="gallery-note">Placeholder scenes. Add your own images in the <code>photos</code> array in the script below.</p>
+                </div>
+                <div class="footer"><span>Archive / 04</span><span>Made with care, updated often.</span></div>
+            </section>
+
+            <!-- 05 RESUME -->
+            <section class="page" id="resume">
+                <div class="page-body">
+                    <div class="resume-grid">
+                        <div>
+                            <div class="eyebrow">Selected Experience</div>
+                            <h1 class="big">Making ideas tangible.</h1>
+                            <p class="lead">I work across product strategy, visual design, and prototyping to create digital experiences with clarity and character.</p>
+                            <a class="open-link" href="resume.pdf" target="_blank" rel="noopener">OPEN FULL RÉSUMÉ <span>→</span></a>
+                            <p class="resume-note">Add your PDF as <code>resume.pdf</code> next to this file.</p>
+                        </div>
+                        <div>
+                            <div class="jobs">
+                                <div class="job"><time>2023—Now</time><div><h3>Senior Product Designer</h3><p>Independent / New York</p></div></div>
+                                <div class="job"><time>2020—2023</time><div><h3>Product Designer</h3><p>Studio North</p></div></div>
+                                <div class="job"><time>2018—2020</time><div><h3>Junior Designer</h3><p>Common Ground</p></div></div>
+                            </div>
+                            <div class="chips"><span>PRODUCT DESIGN</span><span>ART DIRECTION</span><span>PROTOTYPING</span><span>RESEARCH</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer"><span>Archive / 05</span><span>Made with care, updated often.</span></div>
+            </section>
+
+            <!-- 06 TRAVEL -->
+            <section class="page" id="travel">
+                <div class="page-body">
+                    <div class="eyebrow">Travel Diary</div>
+                    <div class="head-row">
+                        <h1 class="big" style="font-size:76px">Notes from elsewhere</h1>
+                        <span class="counter">14 countries · more to come</span>
+                    </div>
+
+                    <div class="travel-grid">
+                        <article class="feature" id="feature">
+                            <!-- To use a real photo, set background-image on .img via the trips array below -->
+                            <div class="img" id="featImg"></div>
+                            <div class="body">
+                                <div class="seal" id="featSeal">JUN · 24</div>
+                                <div class="where" id="featWhere">PAROS, GREECE</div>
+                                <h2 id="featTitle">Blue hours &amp; slow mornings</h2>
+                                <p id="featText">We rented a tiny car, missed every planned turn, and found better places because of it. The island smelled like salt, warm stone, and jasmine after dark.</p>
+                            </div>
+                        </article>
+
+                        <div class="places" id="places"></div>
+                    </div>
+                </div>
+                <div class="footer"><span>Archive / 06</span><span>Made with care, updated often.</span></div>
+            </section>
+
+        </div>
+    </main>
+</div>
+
+<script>
+/* ---------- Header date (auto-updates) ---------- */
+(function () {
+    const d = new Date();
+    document.getElementById("date").textContent =
+        d.toLocaleString("en-US", { month: "short" }) + " " + d.getFullYear();
+})();
+
+/* ---------- Tabs ---------- */
+const panel = document.getElementById("panel");
+const tabs = document.querySelectorAll(".tab");
+const pages = document.querySelectorAll(".page");
+const panelColors = {
+    about: "rgb(240,235,221)",
+    listening: "rgb(237,229,210)",
+    library: "rgb(234,232,220)",
+    photos: "rgb(232,224,213)",
+    resume: "rgb(230,232,228)",
+    travel: "rgb(237,228,211)"
+};
+
+function showTab(id) {
+    if (!panelColors[id]) id = "about";
+    tabs.forEach(t => {
+        const on = t.dataset.tab === id;
+        t.classList.toggle("active", on);
+        t.setAttribute("aria-selected", on);
+    });
+    pages.forEach(p => p.classList.toggle("show", p.id === id));
+    panel.style.setProperty("--panel", panelColors[id]);
+    // the About tab blends into the paper like the reference
+    document.querySelector('.tab[data-tab="about"]').style.background =
+        id === "about" ? panelColors.about : "var(--about)";
+    history.replaceState(null, "", "#" + id);
+}
+tabs.forEach(t => t.addEventListener("click", () => showTab(t.dataset.tab)));
+tabs.forEach((t, i) => t.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight") tabs[(i + 1) % tabs.length].focus();
+    if (e.key === "ArrowLeft") tabs[(i - 1 + tabs.length) % tabs.length].focus();
+}));
+showTab(location.hash.replace("#", "") || "about");
+
+/* ---------- Listening: slow progress bar ---------- */
+(function () {
+    const fill = document.getElementById("progressFill");
+    let p = 55;
+    setInterval(() => { p = p >= 100 ? 0 : p + 0.4; fill.style.width = p + "%"; }, 1000);
+})();
+
+/* ---------- Photos carousel ---------- */
+/* Add your own images: set src: "photos/beach.jpg" and it will replace the gradient. */
+const photos = [
+    { src: "", bg: "linear-gradient(#b5cfe0 0%, #d9e6ec 45%, #5f9db0 55%, #3f8aa3 70%, #e2cfa8 72%, #d8c294 100%)", cap: "Salt air, no plans", loc: "SOMEWHERE BY THE SEA" },
+    { src: "", bg: "linear-gradient(#f2d3a6 0%, #e9a88a 40%, #8d6f8f 70%, #3d3a5a 100%)", cap: "The last good light", loc: "ON THE WAY HOME" },
+    { src: "", bg: "linear-gradient(#cfd8c4 0%, #9fb394 50%, #6b8560 100%)", cap: "A very green detour", loc: "HILLSIDE, LATE MORNING" },
+    { src: "", bg: "linear-gradient(#e6dcc9 0%, #cbb89a 55%, #a48a69 100%)", cap: "Café, window seat", loc: "A QUIET TUESDAY" }
+];
+let pIndex = 0;
+const shot = document.getElementById("shot");
+const dotsEl = document.getElementById("dots");
+
+photos.forEach((_, i) => {
+    const d = document.createElement("i");
+    d.addEventListener("click", () => { pIndex = i; renderPhoto(); });
+    dotsEl.appendChild(d);
+});
+function renderPhoto() {
+    const p = photos[pIndex];
+    shot.style.opacity = 0;
+    setTimeout(() => {
+        shot.style.backgroundImage = p.src ? `url("${p.src}")` : p.bg;
+        shot.style.opacity = 1;
+    }, 150);
+    document.getElementById("photoCap").textContent = p.cap;
+    document.getElementById("photoLoc").textContent = p.loc;
+    document.getElementById("photoCounter").textContent =
+        String(pIndex + 1).padStart(2, "0") + " / " + String(photos.length).padStart(2, "0");
+    [...dotsEl.children].forEach((d, i) => d.classList.toggle("on", i === pIndex));
+}
+document.getElementById("prev").addEventListener("click", () => { pIndex = (pIndex - 1 + photos.length) % photos.length; renderPhoto(); });
+document.getElementById("next").addEventListener("click", () => { pIndex = (pIndex + 1) % photos.length; renderPhoto(); });
+document.addEventListener("keydown", e => {
+    if (!document.getElementById("photos").classList.contains("show")) return;
+    if (e.key === "ArrowRight") document.getElementById("next").click();
+    if (e.key === "ArrowLeft") document.getElementById("prev").click();
+});
+renderPhoto();
+
+/* ---------- Travel diary ---------- */
+/* Add your own images: set src: "photos/paros.jpg" and it will replace the gradient. */
+const trips = [
+    { city: "Lisbon", date: "04.2024", blurb: "Hills, tiled walls, and one very good custard tart.",
+      where: "LISBON, PORTUGAL", seal: "APR · 24", title: "Tiled walls & tram bells",
+      text: "Every street climbed somewhere unexpected. We ate custard tarts standing up and let the trams decide the afternoon.",
+      src: "", bg: "linear-gradient(#e9c98f, #d49a62 55%, #8b5e43)" },
+    { city: "Mexico City", date: "11.2023", blurb: "A week arranged entirely around museums and lunch.",
+      where: "MEXICO CITY, MEXICO", seal: "NOV · 23", title: "Museums, then lunch",
+      text: "The plan was art in the morning and tacos after. The plan held, mostly, and the afternoons stretched out nicely.",
+      src: "", bg: "linear-gradient(#d98f6b, #b8573f 60%, #6d3a30)" },
+    { city: "Kyoto", date: "03.2023", blurb: "Rain on temple roofs and the quietest train ride.",
+      where: "KYOTO, JAPAN", seal: "MAR · 23", title: "Rain on temple roofs",
+      text: "It rained the whole time and nobody minded. The train back was silent in the best way.",
+      src: "", bg: "linear-gradient(#b9c4b4, #8c9f93 60%, #566a62)" },
+    { city: "Paros", date: "06.2024", blurb: "Blue hours and slow mornings.",
+      where: "PAROS, GREECE", seal: "JUN · 24", title: "Blue hours & slow mornings",
+      text: "We rented a tiny car, missed every planned turn, and found better places because of it. The island smelled like salt, warm stone, and jasmine after dark.",
+      src: "", bg: "linear-gradient(#7fb0d0 0%, #cfe0ea 45%, #f3f1ea 55%, #3d6f8f 100%)" }
+];
+const placesEl = document.getElementById("places");
+function showTrip(i) {
+    const t = trips[i];
+    const img = document.getElementById("featImg");
+    img.style.backgroundImage = t.src ? `url("${t.src}")` : t.bg;
+    document.getElementById("featWhere").textContent = t.where;
+    document.getElementById("featSeal").textContent = t.seal;
+    document.getElementById("featTitle").textContent = t.title;
+    document.getElementById("featText").textContent = t.text;
+}
+trips.slice(0, 3).forEach((t, i) => {
+    const el = document.createElement("div");
+    el.className = "place";
+    el.innerHTML = `<div class="top"><h3>${t.city}</h3><time>${t.date}</time></div><p>${t.blurb}</p>`;
+    el.addEventListener("click", () => showTrip(i));
+    placesEl.appendChild(el);
+});
+showTrip(3); /* feature starts on Paros, like the reference */
+</script>
+</body>
+</html>
